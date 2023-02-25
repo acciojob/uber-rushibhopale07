@@ -13,8 +13,7 @@ public class Cab {
 
     //parent is driver one cab for one driver
 
-    @OneToOne
-    @JoinColumn
+    @OneToOne(mappedBy = "cab", cascade = CascadeType.ALL)
     private Driver driver;
 
     public Cab() {
