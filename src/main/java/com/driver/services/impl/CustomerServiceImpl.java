@@ -38,11 +38,13 @@ public class CustomerServiceImpl implements CustomerService {
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
 		TripBooking tripBooking=new TripBooking();
-		tripBooking.setStatus(TripStatus.CONFIRMED);
-		Driver driver= tripBooking.getDriver();
-		int driverId= driver.getDriverId();
-		Cab cab= driverRepository2.findById(driverId).get().getCab();
-		cab.setAvailable(false);
+		if(tripBooking!=null) {
+			tripBooking.setStatus(TripStatus.CONFIRMED);
+			Driver driver = tripBooking.getDriver();
+			int driverId = driver.getDriverId();
+			Cab cab = driverRepository2.findById(driverId).get().getCab();
+			cab.setAvailable(false);
+		}
 		return tripBooking;
 	}
 
