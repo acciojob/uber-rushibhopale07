@@ -9,9 +9,6 @@ import com.driver.repository.CustomerRepository;
 import com.driver.repository.DriverRepository;
 import com.driver.repository.TripBookingRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -41,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
 		TripBooking tripBooking=new TripBooking();
-		tripBooking.setTripStatus(TripStatus.CONFIRMED);
+		tripBooking.setStatus(TripStatus.CONFIRMED);
 		Driver driver= tripBooking.getDriver();
 		int driverId= driver.getDriverId();
 		Cab cab= driverRepository2.findById(driverId).get().getCab();
@@ -53,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void cancelTrip(Integer tripId){
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking= tripBookingRepository2.findById(tripId).get();
-		tripBooking.setTripStatus(TripStatus.CANCELED);
+		tripBooking.setStatus(TripStatus.CANCELED);
 		Driver driver= tripBooking.getDriver();
 		int driverId= driver.getDriverId();
 		Cab cab= driverRepository2.findById(driverId).get().getCab();
@@ -66,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId){
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking= tripBookingRepository2.findById(tripId).get();
-		tripBooking.setTripStatus(TripStatus.COMPLETED);
+		tripBooking.setStatus(TripStatus.COMPLETED);
 		Driver driver= tripBooking.getDriver();
 		int driverId= driver.getDriverId();
 		Cab cab= driverRepository2.findById(driverId).get().getCab();
