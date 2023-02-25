@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 
 		if (driver ==null)
-			throw new Exception("No value present");
+			throw new Exception("No cab available!");
 
 		driver.getCab().setAvailable(false);
 
@@ -81,6 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
 		driver.getTripBookingList().add(tripBooking);
 		driverRepository2.save(driver);
 
+		tripBookingRepository2.save(tripBooking);
 		return tripBooking;
 	}
 
