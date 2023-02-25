@@ -16,8 +16,7 @@ public class Driver {
 
     //One driver have one cab
 
-    @OneToOne
-    @JoinColumn
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
     private Cab cab;
 
     //one driver can have many trip Bookings
