@@ -1,6 +1,8 @@
 package com.driver.services.impl;
 
 import com.driver.model.Cab;
+import com.driver.model.TripBooking;
+import com.driver.model.TripStatus;
 import com.driver.repository.CabRepository;
 import com.driver.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.driver.model.Driver;
 import com.driver.repository.DriverRepository;
+
+import java.util.List;
 
 @Service
 public class DriverServiceImpl implements DriverService {
@@ -24,6 +28,7 @@ public class DriverServiceImpl implements DriverService {
 		Driver driver = new Driver();
 		driver.setMobile(mobile);
 		driver.setPassword(password);
+
 		Cab cab= new Cab(true,driver, 10);
 		driver.setCab(cab);
 		driverRepository3.save(driver);
@@ -32,15 +37,30 @@ public class DriverServiceImpl implements DriverService {
 	@Override
 	public void removeDriver(int driverId){
 		// Delete driver without using deleteById function
-		driverRepository3.deleteById(driverId);
+		//driverRepository3.deleteById(driverId);
+
+		//when we remove the driver we need to delete there cab
+		//as well as there trip status will be cancelled also
+
+		Driver driver= driverRepository3.findById(driverId).get();
+		Cab cab = driver.getCab();
+		cabRepository3.delete(cab); // we remove the cab from cabrepository
+
+		List<TripBooking> tripBookingList = driver.getTripBookingList();
+
+		for (TripBooking tripBooking :tripBookingList)
+		{
+			if(tripBooking.getStatus() == TripStatus.CONFIRMED) //check if status is confirmed
+				tripBooking.setStatus(TripStatus.CANCELED);    // we cancelled there status and remove them
+		}
+		driverRepository3.delete(driver);
 	}
 
 	@Override
 	public void updateStatus(int driverId){
 		//Set the status of respective car to unavailable
-		Driver driver = new Driver();
-		Cab cab= new Cab(false,driver, 10);
-		driver.setCab(cab);
+		Driver driver = driverRepository3.findById(driverId).get();
+		driver.getCab().setAvailable(false);
 		driverRepository3.save(driver);
 	}
 }

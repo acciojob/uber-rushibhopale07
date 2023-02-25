@@ -21,6 +21,7 @@ public class Admin {
         this.password = password;
     }
 
+
     public int getAdminId() {
         return adminId;
     }
